@@ -35,7 +35,7 @@ public class GraphFactory
 
                 var weight = radnom.Next(20);
 
-                node.AddEdge(node2, weight);
+                graph.AddEdge(node, node2, weight);
             }
         }
 

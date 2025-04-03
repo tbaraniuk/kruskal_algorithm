@@ -6,15 +6,30 @@ namespace KruskalAlgorithm;
 public class Graph
 {
     public List<Node> Nodes;
+    public List<(Node, Node, int)> Edges;
 
     public Graph()
     {
         Nodes = new List<Node>();
+        Edges = new List<(Node, Node, int)>();
     }
 
     public void AddNode(Node node)
     {
         Nodes.Add(node);
+    }
+
+    public void AddEdge(Node node1, Node node2, int weight)
+    {
+        if (node1.Id == node2.Id)
+        {
+            throw new ArgumentException("The vertex can not be adjacent to itself");
+        }
+
+        node1.AdjacencySet.Add((node2, weight));
+        node2.AdjacencySet.Add((node1, weight));
+
+        Edges.Add((node1, node2, weight));
     }
 
     public int[,] GetAdjacencyMatrix()

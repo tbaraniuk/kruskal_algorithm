@@ -37,7 +37,7 @@ public class GraphFactory
                 node2 = graph.Nodes[randIndex2];
             }
 
-            var weight = random.Next(1, 20);
+            var weight = random.Next(1, 5);
 
             graph.AddEdge(node, node2, weight);
         }

@@ -4,14 +4,15 @@ namespace KruskalAlgorithm;
 
 public class KruskalsAlgorithm
 {
-    public static int MinimumSpanningTreeOnAdjacencyList(Graph graph)
+    public static (int, Graph) MinimumSpanningTreeOnAdjacencyList(Graph graph)
     {
         var AdjacencyList = graph.GetAdjacencyList();
         var AllNodes = AdjacencyList.Select(x => x.Key).ToHashSet();
         int weightOfMinimumSpanningTree = 0;
+        int EndgesInMinimumSpanningTree = 0;
+        int NodesInInputGraph = AllNodes.Count;
         Graph MinimumSpanningTreeAsGraph = new Graph();
         Dictionary<(Node, Node), int> TableOfEdges = new Dictionary<(Node, Node), int>();
-        PriorityQueue<(Node, Node), int> priorityQueue = new PriorityQueue<(Node, Node), int>();
         Dictionary<int, int> LabelTable = new Dictionary<int, int>();
         foreach (var pair in AdjacencyList)
         {
@@ -20,26 +21,24 @@ public class KruskalsAlgorithm
                 TableOfEdges[(pair.Key, nodeValueTuple.Item1)] = nodeValueTuple.Item2;
             }
         }
-
-        foreach (var valueTuple in TableOfEdges.OrderBy(x => x.Value))
-        {
-            priorityQueue.Enqueue(valueTuple.Key,valueTuple.Value); // Push in this case O(1) because we have a sorted dictionary
-        }
         foreach (var node in AllNodes)
         {
             MinimumSpanningTreeAsGraph.AddNode(node);
             LabelTable[node.Id] = node.Id;
         }
         
-        HashSet<Node> NodesUsedInMinGrap = new HashSet<Node>();
-
-        while (!AllNodes.Equals(NodesUsedInMinGrap))
+        foreach (var Edge in TableOfEdges.OrderBy(x => x.Value))
         {
-            var EdgeFromQueue = priorityQueue.Dequeue();
-            if (LabelTable[EdgeFromQueue.Item1.Id] != LabelTable[EdgeFromQueue.Item2.Id])
+            if (EndgesInMinimumSpanningTree == NodesInInputGraph -1)
             {
-                int OldLabel = LabelTable[EdgeFromQueue.Item1.Id];
-                int NewLabel = LabelTable[EdgeFromQueue.Item2.Id];
+                break;
+            }
+            
+            if (LabelTable[Edge.Key.Item1.Id] != LabelTable[Edge.Key.Item2.Id])
+            {
+                int OldLabel = LabelTable[Edge.Key.Item1.Id];
+                int NewLabel = LabelTable[Edge.Key.Item2.Id];
+                
                 foreach (var pair in LabelTable)
                 {
                     if (pair.Value == OldLabel)
@@ -48,21 +47,20 @@ public class KruskalsAlgorithm
                     }
                 }
 
-                weightOfMinimumSpanningTree = weightOfMinimumSpanningTree +
-                                              TableOfEdges[(EdgeFromQueue.Item1, EdgeFromQueue.Item2)];
-                NodesUsedInMinGrap.Add(EdgeFromQueue.Item1);
-                NodesUsedInMinGrap.Add(EdgeFromQueue.Item2);
+                weightOfMinimumSpanningTree = weightOfMinimumSpanningTree + Edge.Value;
+                MinimumSpanningTreeAsGraph.AddEdge(Edge.Key.Item1,Edge.Key.Item2,Edge.Value);
+                EndgesInMinimumSpanningTree++;
             }
+            
         }
-
-        return weightOfMinimumSpanningTree;
-
+        return (weightOfMinimumSpanningTree,MinimumSpanningTreeAsGraph);
     }
 
-    /*public static int MinimumSpanningTreeOnAdjacencyListAdjacencyMatrix(Graph graph)
+    /*public static (int,Graph) MinimumSpanningTreeOnAdjacencyMatrix(Graph graph)
     {
+        var adjacencyMatrix = graph.GetAdjacencyMatrix();
         
     }*/
     
-    //public static (int Minimumweight, int[,]) 
+    
 }

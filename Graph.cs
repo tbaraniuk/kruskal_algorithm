@@ -38,7 +38,7 @@ public class Graph
 
         for(var i = 0; i < Nodes.Count; i++)
         {
-            var currentNode = Nodes[0];
+            var currentNode = Nodes[i];
             var adjacentVertices = currentNode.GetAdjacentVertices();
 
             foreach(var (node, weight) in adjacentVertices)

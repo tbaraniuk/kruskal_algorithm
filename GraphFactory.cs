@@ -5,12 +5,12 @@ namespace KruskalAlgorithm;
 
 public class GraphFactory
 {
-    public static Graph CreateGraph(int size, float density)
+    public static Graph CreateGraph(int size, double density)
     {
         var graph = new Graph();
         var maxEdges = size * (size - 1) / 2;
         var avgEdgesPerNode = density * maxEdges / 2;
-        var radnom = new Random();
+        var random = new Random();
 
         for(var i = 0; i < size; i++)
         {
@@ -19,24 +19,27 @@ public class GraphFactory
             graph.AddNode(node);
         }
 
-        for(var i = 0; i < size; i++)
+
+        for(var j = 0; j < avgEdgesPerNode; j++)
         {
-            var node = graph.Nodes[i];
+            var randIndex = random.Next(size);
+            var randIndex2 = random.Next(size);
 
-            for(var j = 0; j < avgEdgesPerNode; j++)
+            var node = graph.Nodes[randIndex];
+            var node2 = graph.Nodes[randIndex2];
+
+            while(randIndex2 == randIndex || node.GetEdgeWeight(node2) > 0)
             {
-                var randIndex = radnom.Next(size - 1);
-                var node2 = graph.Nodes[randIndex];
+                randIndex = random.Next(size);
+                randIndex2 = random.Next(size);
 
-                while(randIndex == j || node.GetEdgeWeight(node2) > 0)
-                {
-                    randIndex = radnom.Next(size - 1);
-                }
-
-                var weight = radnom.Next(20);
-
-                graph.AddEdge(node, node2, weight);
+                node = graph.Nodes[randIndex];
+                node2 = graph.Nodes[randIndex2];
             }
+
+            var weight = random.Next(1, 20);
+
+            graph.AddEdge(node, node2, weight);
         }
 
         return graph;

@@ -14,7 +14,12 @@ public class Node
     }
 
     public int GetEdgeWeight(Node node) {
-        var edge = AdjacencySet.First(tup => tup.Item1.Id == node.Id);
+        var edge = AdjacencySet.FirstOrDefault(tup => tup.Item1.Id == node.Id);
+
+        if(edge.Item1 == null)
+        {
+            return 0;
+        }
 
         return edge.Item2;
     }

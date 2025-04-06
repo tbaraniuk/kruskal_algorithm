@@ -68,4 +68,31 @@ public class Graph
 
         return dict;
     }
+
+    public bool IsConnected()
+    {
+        var visitedPoints = new HashSet<Node>();
+        var nodesToVisit = new Queue<Node>();
+
+        nodesToVisit.Enqueue(Nodes[0]);
+
+        while(nodesToVisit.Count > 0)
+        {
+            var node = nodesToVisit.Dequeue();
+
+            if (visitedPoints.Contains(node))
+            {
+                continue;
+            }
+
+            foreach(var item in node.AdjacencySet)
+            {
+                nodesToVisit.Enqueue(item.Item1);
+            }
+
+            visitedPoints.Add(node);
+        }
+
+        return visitedPoints.Count == Nodes.Count;
+    }
 }

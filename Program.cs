@@ -77,14 +77,19 @@ Console.WriteLine($"Kruskal algorhytm took {algorhytmTime.ElapsedMilliseconds} m
 string projectRoot = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
 string filePath = Path.Combine(projectRoot, "dataMatrix.csv");
 StringBuilder csvContent = new StringBuilder();
-csvContent.AppendLine("Size,Density,№1,№2,№3,№4,№5,№6,№7,№8,№9,№10,№11,№12,№13,№14,№15,№16,№17,№18,№19,№20,Average");
+StringBuilder numbers = new StringBuilder();
+for( int i = 0; i < 100; i++)
+{
+    numbers.Append($"№{i + 1},");
+}
+csvContent.AppendLine($"Size,Density,{numbers.ToString()}Average");
 for (int verticeNumber = 20;verticeNumber <= 200; verticeNumber += 20 ) 
 {
     for (double density = 0.2; density <= 1; density += 0.2)
     {
         StringBuilder times = new StringBuilder();
         
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 100; i++)
         {
             Graph graph = GraphFactory.CreateGraph(verticeNumber, density);
             while (!graph.IsConnected())
